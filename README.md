@@ -3,6 +3,24 @@ Tabs
 
 Usage:
 ===========
+tab_layout.xml example:
+
+	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:padding="10px">
+		<ImageView
+		    android:id="@+id/tab_icon"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:scaleType="centerInside"
+		    android:layout_gravity="center"
+		    android:src="@drawable/tab_selector"/>
+	</FrameLayout>
+	
+activity example:
+
+<pre>
 public class MainActivity extends TabActivity{
 	@Override
 	protected void onCreate(Bundle state) {
@@ -27,20 +45,4 @@ public class MainActivity extends TabActivity{
 		});
 	}
 }
-
-
-tab_layout.xml example:
-
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10px">
-	<ImageView
-	    android:id="@+id/tab_icon"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:scaleType="centerInside"
-	    android:layout_gravity="center"
-	    android:src="@drawable/tab_selector"/>
-</FrameLayout>
+</pre>
