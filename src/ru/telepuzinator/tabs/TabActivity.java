@@ -37,6 +37,7 @@ public abstract class TabActivity extends FragmentActivity {
 		
 		if(mFirstLaunch) {
 			switchTab(0);
+			mFirstLaunch = false;
 		}
 	}
 	
