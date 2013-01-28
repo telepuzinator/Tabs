@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public abstract class TabActivity extends FragmentActivity {
@@ -29,6 +30,11 @@ public abstract class TabActivity extends FragmentActivity {
 			mState = new State(state, getLayoutInflater(), mTabLayout);
 			displayFragment(mState.getCurrentTab(), mState.getCurrent());
 		}
+	}
+	
+	public void addHeader(int drawable) {
+		ImageView header = (ImageView) findViewById(R.id.tab_activity_header);
+		header.setImageResource(drawable);
 	}
 	
 	@Override

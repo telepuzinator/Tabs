@@ -2,16 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/tab_activity_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitStart"/>
     <ru.telepuzinator.tabs.TabLayout 
         android:id="@+id/tab_activity_tabs"
 	    android:layout_width="match_parent"
 	    android:layout_height="@dimen/tab_height"
 	    android:orientation="horizontal"
 	    android:layout_alignParentBottom="true"
-	    android:gravity="center_horizontal"/>
+	    android:gravity="center_horizontal|bottom"
+	    android:layout_marginTop="-10dp"/>
 	<FrameLayout 
 	    android:id="@+id/tab_activity_tab_content"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:layout_above="@id/tab_activity_tabs"/>
+	    android:layout_above="@id/tab_activity_tabs"
+	    android:layout_below="@id/tab_activity_header"/>
 </RelativeLayout>
