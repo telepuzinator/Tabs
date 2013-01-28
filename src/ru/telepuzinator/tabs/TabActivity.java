@@ -1,5 +1,7 @@
 package ru.telepuzinator.tabs;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,7 +13,7 @@ public abstract class TabActivity extends FragmentActivity {
 	private LinearLayout mTabLayout;
 	private State mState;
 	
-	private OnTabChangeListener mTabListener;
+	private ArrayList<OnTabChangeListener> mTabListener;
 	
 	private Fragment mCurrent;
 	
@@ -19,6 +21,7 @@ public abstract class TabActivity extends FragmentActivity {
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
 		setContentView(R.layout.tabs_activity);
+		mTabListener = new ArrayList<OnTabChangeListener>();
 		mTabLayout = (LinearLayout) findViewById(R.id.tab_activity_tabs);
 		
 		if(state == null) {
@@ -41,7 +44,9 @@ public abstract class TabActivity extends FragmentActivity {
 	}
 	
 	public void setOnTabChangeListener(OnTabChangeListener tabListener) {
-		mTabListener = tabListener;
+		if(!mTabListener.contains(tabListener)) {
+			mTabListener.add(tabListener);
+		}
 	}
 	
 	public void switchTab(int tab) {
@@ -49,8 +54,8 @@ public abstract class TabActivity extends FragmentActivity {
 		displayFragment(tab, mState.getLast(tab));
 		mState.setCurrentTab(tab);
 		
-		if(mTabListener != null) {
-			mTabListener.onTabChange(tab);
+		for(OnTabChangeListener listener: mTabListener) {
+			listener.onTabChange(tab);
 		}
 	}
 	
