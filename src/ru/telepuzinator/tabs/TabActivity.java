@@ -1,5 +1,7 @@
 package ru.telepuzinator.tabs;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,20 +14,19 @@ public abstract class TabActivity extends FragmentActivity {
 	private LinearLayout mTabLayout;
 	private State mState;
 	
-	private OnTabChangeListener mTabListener;
+	private ArrayList<OnTabChangeListener> mTabListener;
 	
 	private Fragment mCurrent;
-	private boolean mFirstLaunch = false;
 	
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
 		setContentView(R.layout.tabs_activity);
+		mTabListener = new ArrayList<OnTabChangeListener>();
 		mTabLayout = (LinearLayout) findViewById(R.id.tab_activity_tabs);
 		
 		if(state == null) {
 			mState = new State();
-			mFirstLaunch = true;
 		} else {
 			mState = new State(state, getLayoutInflater(), mTabLayout);
 			displayFragment(mState.getCurrentTab(), mState.getCurrent());
@@ -35,16 +36,6 @@ public abstract class TabActivity extends FragmentActivity {
 	public void addHeader(int drawable) {
 		ImageView header = (ImageView) findViewById(R.id.tab_activity_header);
 		header.setImageResource(drawable);
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		if(mFirstLaunch) {
-			switchTab(0);
-			mFirstLaunch = false;
-		}
 	}
 	
 	@Override
@@ -59,31 +50,35 @@ public abstract class TabActivity extends FragmentActivity {
 	}
 	
 	public void setOnTabChangeListener(OnTabChangeListener tabListener) {
-		mTabListener = tabListener;
+		if(!mTabListener.contains(tabListener)) {
+			mTabListener.add(tabListener);
+		}
 	}
 	
 	public void switchTab(int tab) {
 		if(mState.getCurrentTab() == tab) return;
-		mState.setCurrentTab(tab);
 		displayFragment(tab, mState.getLast(tab));
+		mState.setCurrentTab(tab);
 		
-		if(mTabListener != null) {
-			mTabListener.onTabChange(tab);
+		for(OnTabChangeListener listener: mTabListener) {
+			listener.onTabChange(tab);
 		}
 	}
 	
 	public void addTab(Fragment frag, int tabLayout) {
 		int tab = mState.createTab(tabLayout, getLayoutInflater(), mTabLayout);
-		addFragment(frag, tab);
+		addFragment(frag, tab, mState.getCurrent() < 0);
 	}
 	
 	public void addFragment(Fragment frag) {
-		addFragment(frag, mState.getCurrentTab());
+		addFragment(frag, mState.getCurrentTab(), true);
 	}
 	
-	public void addFragment(Fragment frag, int tab) {
+	public void addFragment(Fragment frag, int tab, boolean display) {
 		int i = mState.addFragment(frag, tab);
-		displayFragment(tab, i);
+		if(display) {
+			displayFragment(tab, i);
+		}
 	}
 	
 	public void replaceBack() {
