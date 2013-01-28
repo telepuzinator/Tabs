@@ -14,7 +14,6 @@ public abstract class TabActivity extends FragmentActivity {
 	private OnTabChangeListener mTabListener;
 	
 	private Fragment mCurrent;
-	private boolean mFirstLaunch = false;
 	
 	@Override
 	protected void onCreate(Bundle state) {
@@ -24,20 +23,9 @@ public abstract class TabActivity extends FragmentActivity {
 		
 		if(state == null) {
 			mState = new State();
-			mFirstLaunch = true;
 		} else {
 			mState = new State(state, getLayoutInflater(), mTabLayout);
 			displayFragment(mState.getCurrentTab(), mState.getCurrent());
-		}
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		if(mFirstLaunch) {
-			switchTab(0);
-			mFirstLaunch = false;
 		}
 	}
 	
@@ -58,8 +46,8 @@ public abstract class TabActivity extends FragmentActivity {
 	
 	public void switchTab(int tab) {
 		if(mState.getCurrentTab() == tab) return;
-		mState.setCurrentTab(tab);
 		displayFragment(tab, mState.getLast(tab));
+		mState.setCurrentTab(tab);
 		
 		if(mTabListener != null) {
 			mTabListener.onTabChange(tab);
@@ -68,16 +56,18 @@ public abstract class TabActivity extends FragmentActivity {
 	
 	public void addTab(Fragment frag, int tabLayout) {
 		int tab = mState.createTab(tabLayout, getLayoutInflater(), mTabLayout);
-		addFragment(frag, tab);
+		addFragment(frag, tab, mState.getCurrent() < 0);
 	}
 	
 	public void addFragment(Fragment frag) {
-		addFragment(frag, mState.getCurrentTab());
+		addFragment(frag, mState.getCurrentTab(), true);
 	}
 	
-	public void addFragment(Fragment frag, int tab) {
+	public void addFragment(Fragment frag, int tab, boolean display) {
 		int i = mState.addFragment(frag, tab);
-		displayFragment(tab, i);
+		if(display) {
+			displayFragment(tab, i);
+		}
 	}
 	
 	public void replaceBack() {

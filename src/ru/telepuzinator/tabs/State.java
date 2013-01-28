@@ -104,7 +104,8 @@ public class State implements Serializable {
 		if(mCurrentTab >= 0 && mCurrent >= 0) {
 			try {
 				mFragmentsStateList.get(mCurrentTab).get(mCurrent).rememberFragmentState(fm);
-			} catch(IllegalStateException stateException) {
+			} catch(IllegalStateException e) {
+				e.printStackTrace();
 			}
 		}
 		setCurrentTab(tab);
