@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public abstract class TabActivity extends FragmentActivity {
+	public boolean mTabsOnTop = false;
 	private LinearLayout mTabLayout;
 	private State mState;
 	
@@ -21,7 +22,11 @@ public abstract class TabActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
-		setContentView(R.layout.tabs_activity);
+		if(mTabsOnTop) {
+			setContentView(R.layout.tabs_activity_top);
+		} else {
+			setContentView(R.layout.tabs_activity);
+		}
 		mTabListener = new ArrayList<OnTabChangeListener>();
 		mTabLayout = (LinearLayout) findViewById(R.id.tab_activity_tabs);
 		

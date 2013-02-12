@@ -50,7 +50,7 @@ public class Tab {
 	
 	public void select() {
 		mTabView.setSelected(true);
-		mIsSelected = false;
+		mIsSelected = true;
 	}
 	
 	public void deselect() {
