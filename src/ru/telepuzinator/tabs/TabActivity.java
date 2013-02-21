@@ -10,9 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public abstract class TabActivity extends FragmentActivity implements ViewTreeObserver.OnGlobalLayoutListener{
+
+	public boolean mTabsOnTop = false;
 	private LinearLayout mTabLayout;
 	private State mState;
 	
@@ -25,7 +28,11 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
-		setContentView(R.layout.tabs_activity);
+		if(mTabsOnTop) {
+			setContentView(R.layout.tabs_activity_top);
+		} else {
+			setContentView(R.layout.tabs_activity);
+		}
 		mTabListener = new ArrayList<OnTabChangeListener>();
 		mTabLayout = (LinearLayout) findViewById(R.id.tab_activity_tabs);
 		
@@ -52,6 +59,11 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 		} else if(heightDiff < 100) {
 			showTabs();
 		}
+	}
+	
+	public void addHeader(int drawable) {
+		ImageView header = (ImageView) findViewById(R.id.tab_activity_header);
+		header.setImageResource(drawable);
 	}
 	
 	@Override
