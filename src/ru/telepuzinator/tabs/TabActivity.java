@@ -38,6 +38,32 @@ public abstract class TabActivity extends FragmentActivity {
 		}
 	}
 	
+	public Fragment getCurrentFragment() {
+		return mCurrent;
+	}
+	
+//	final View activityRootView = findViewById(R.id.loginRootView);
+//
+//	activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//	@Override
+//	public void onGlobalLayout() {
+//	Rect r = new Rect();
+//	activityRootView.getWindowVisibleDisplayFrame(r);
+//
+//	int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
+//	if (heightDiff > 100) {
+//	hideMenu();
+//	mRegText.setVisibility(View.GONE);
+//	mReg.setVisibility(View.GONE);
+//
+//	} else if(heightDiff < 100) {
+//	showMenu();
+//	mRegText.setVisibility(View.VISIBLE);
+//	mReg.setVisibility(View.VISIBLE);
+//	}
+//	}
+//	});
+	
 	public void addHeader(int drawable) {
 		ImageView header = (ImageView) findViewById(R.id.tab_activity_header);
 		header.setImageResource(drawable);
