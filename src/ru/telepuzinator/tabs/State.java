@@ -72,7 +72,13 @@ public class State implements Serializable {
 	}
 	
 	public Fragment getFragment(int number) {
-		return mFragmentsStateList.get(mCurrentTab).get(number).getFragment();
+		if(mCurrentTab < mFragmentsStateList.size() && mCurrentTab >= 0) {
+			ArrayList<FragmentsState> statte = mFragmentsStateList.get(mCurrentTab);
+			if(number < statte.size() && number >= 0) {
+				return statte.get(number).getFragment();
+			}
+		}
+		return null;
 	}
 	
 	//numbers
@@ -85,8 +91,14 @@ public class State implements Serializable {
 	}
 	
 	public int getPrevious() {
-		mFragmentsStateList.get(mCurrentTab).remove(mCurrent);
-		return --mCurrent;
+		if(mCurrentTab < mFragmentsStateList.size() && mCurrentTab >= 0) {
+			ArrayList<FragmentsState> statte = mFragmentsStateList.get(mCurrentTab);
+			if(mCurrent < statte.size() && mCurrent >= 0) {
+				statte.remove(mCurrent);
+				return --mCurrent;
+			}
+		}
+		return mCurrent;
 	}
 	
 	public int getLast(int tab) {

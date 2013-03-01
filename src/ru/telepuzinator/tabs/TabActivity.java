@@ -2,6 +2,7 @@ package ru.telepuzinator.tabs;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -24,6 +26,7 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 	private Fragment mCurrent;
 	
 	private View activityRootView;
+	private boolean isKeyboardShown = false;
 	
 	@Override
 	protected void onCreate(Bundle state) {
@@ -56,36 +59,21 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 		int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
 		if (heightDiff > 100) {
 			hideTabs();
+			isKeyboardShown = true;
 		} else if(heightDiff < 100) {
 			showTabs();
+			isKeyboardShown = false;
 		}
 	}
+	
+	private void hideKeyboard() {
+        final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+    }
 	
 	public Fragment getCurrentFragment() {
 		return mCurrent;
 	}
-	
-//	final View activityRootView = findViewById(R.id.loginRootView);
-//
-//	activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//	@Override
-//	public void onGlobalLayout() {
-//	Rect r = new Rect();
-//	activityRootView.getWindowVisibleDisplayFrame(r);
-//
-//	int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
-//	if (heightDiff > 100) {
-//	hideMenu();
-//	mRegText.setVisibility(View.GONE);
-//	mReg.setVisibility(View.GONE);
-//
-//	} else if(heightDiff < 100) {
-//	showMenu();
-//	mRegText.setVisibility(View.VISIBLE);
-//	mReg.setVisibility(View.VISIBLE);
-//	}
-//	}
-//	});
 	
 	public void addHeader(int drawable) {
 		ImageView header = (ImageView) findViewById(R.id.tab_activity_header);
@@ -113,10 +101,6 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 		 if(mTabLayout != null) {
 			 mTabLayout.setVisibility(View.GONE);
 		 }
-	}
-	
-	public Fragment getCurrentFragment() {
-		return mCurrent;
 	}
 	
 	public void setOnTabChangeListener(OnTabChangeListener tabListener) {
@@ -172,5 +156,9 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 		mCurrent = getFragment(number);
 		ft.replace(R.id.tab_activity_tab_content, mCurrent);
 		ft.commit();
+		
+		if(isKeyboardShown) {
+			hideKeyboard();
+		}
 	}
 }
