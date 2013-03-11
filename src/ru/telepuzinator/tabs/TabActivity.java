@@ -67,8 +67,12 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 	}
 	
 	private void hideKeyboard() {
-        final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+		try {
+	        final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+	        imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+		} catch(Exception e) {
+			//ignore
+		}
     }
 	
 	public Fragment getCurrentFragment() {
