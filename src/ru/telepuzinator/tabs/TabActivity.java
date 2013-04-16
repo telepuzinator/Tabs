@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import com.slidingmenu.lib.SlidingMenu;
 
 public abstract class TabActivity extends FragmentActivity implements ViewTreeObserver.OnGlobalLayoutListener{
 
@@ -27,14 +28,27 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 	
 	private View activityRootView;
 	private boolean isKeyboardShown = false;
+
+    private SlidingMenu mMenu;
 	
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
+
+        mMenu = new SlidingMenu(this);
+        mMenu.setMode(SlidingMenu.LEFT);
+        mMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        mMenu.setShadowWidthRes(R.dimen.slid1ingmenu_shadowWidth);
+        mMenu.setShadowDrawable(R.drawable.menu_shadow);
+        mMenu.setBehindOffsetRes(R.dimen.slidingmenu_behindOffSet);
+        mMenu.setFadeDegree(0.35f);
+        mMenu.setBackgroundColor(android.R.color.white);
+        setContentView(mMenu);
+
 		if(mTabsOnTop) {
-			setContentView(R.layout.tabs_activity_top);
+			mMenu.setContent(R.layout.tabs_activity_top);
 		} else {
-			setContentView(R.layout.tabs_activity);
+            mMenu.setContent(R.layout.tabs_activity);
 		}
 		mTabListener = new ArrayList<OnTabChangeListener>();
 		mTabLayout = (LinearLayout) findViewById(R.id.tab_activity_tabs);
@@ -50,6 +64,27 @@ public abstract class TabActivity extends FragmentActivity implements ViewTreeOb
 		}
 		showTabs();
 	}
+
+    public SlidingMenu getMenu(){
+        return mMenu;
+    }
+
+    public void toggleMenu(){
+        mMenu.toggle();
+    }
+
+    public void setMenu(View menu){
+        mMenu.setMenu(menu);
+    }
+
+    public void setMenu(int res){
+        View v = getLayoutInflater().inflate(res,null);
+        setMenu(v);
+    }
+
+    public boolean isMenuShowing(){
+        return mMenu.isMenuShowing();
+    }
 	
 	@Override
 	public void onGlobalLayout() {
